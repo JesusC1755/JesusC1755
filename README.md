@@ -56,9 +56,7 @@
 ### 📈 Estadísticas de GitHub
 
 <div align="center">
-  <!-- Cambia "TU_USUARIO" por tu nombre de usuario real en GitHub en los siguientes enlaces -->
-  <img src="https://github-readme-stats.vercel.app/api?username=TU_USUARIO&show_icons=true&theme=dracula&hide_border=true" alt="Estadísticas de TU_USUARIO" width="48%" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=TU_USUARIO&layout=compact&theme=dracula&hide_border=true" alt="Lenguajes más usados" width="48%" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=JesusC1755&layout=compact&theme=dracula&hide_border=true" alt="Lenguajes más usados" width="48%" />
 </div>
 
 <br>
