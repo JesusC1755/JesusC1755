@@ -78,7 +78,7 @@ El enfoque técnico de mis desarrollos prioriza:
 <table>
   <tr>
     <td width="50%" valign="top">
-      <h3>01. CourseV</h3>
+      <p><strong><font size="4">01. CourseV</font></strong></p>
       <p><strong>Plataforma educativa full stack con IA generativa, RAG, Model Context Protocol (MCP) y asistencia docente interactiva.</strong></p>
       <p>
         Solución integral para diseñar, estructurar y gestionar cursos, tareas y contenidos académicos. Conecta modelos de lenguaje con la base de conocimiento y el dominio de la plataforma para automatizar la labor pedagógica sin perder el control humano.
@@ -88,7 +88,7 @@ El enfoque técnico de mis desarrollos prioriza:
       </p>
     </td>
     <td width="50%" valign="top">
-      <h3>02. Cobro</h3>
+      <p><strong><font size="4">02. Cobro</font></strong></p>
       <p><strong>Monorepo fintech para gestión de créditos, tesorería de caja menor y optimización logística de cobranza en campo.</strong></p>
       <p>
         Sistema empresarial distribuido que orquesta desembolsos, pagos transaccionales con bloqueo pesimista, ruteo georreferenciado con Dijkstra, pasarela de mensajería WhatsApp y cliente web con soporte offline.
