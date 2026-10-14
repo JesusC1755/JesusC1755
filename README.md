@@ -32,21 +32,6 @@
     <tr>
       <td>
         <a
-          href="https://github.com/JesusC1755?tab=overview"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Ver estadísticas de GitHub de Jesús Cueto"
-        >
-          <img
-            src="https://github-readme-stats.vercel.app/api?username=JesusC1755&show_icons=true&count_private=true&include_all_commits=true&theme=tokyonight&hide_border=false"
-            alt="GitHub Stats de Jesús Cueto"
-          >
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <a
           href="https://github.com/JesusC1755"
           target="_blank"
           rel="noopener noreferrer"
@@ -123,14 +108,11 @@ CourseV es una plataforma educativa creada para modernizar el aprendizaje digita
 
 El valor central del sistema reside en conectar agentes LLM con herramientas de dominio autorizadas mediante el estándar **Model Context Protocol (MCP)**, garantizando que el asistente opere sobre el contexto curricular real y genere planes de estudio editables bajo un flujo *Human-in-the-loop*.
 
-<div align="center">
-  <a href="https://github.com/Jesuh02/MCP-backendDeploy" target="_blank" rel="noopener noreferrer">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=Jesuh02&repo=MCP-backendDeploy&theme=tokyonight&hide_border=false" alt="CourseV Backend MCP" width="48%" />
-  </a>
-  <a href="https://github.com/Jesuh02/coursev_web_frontend" target="_blank" rel="noopener noreferrer">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=Jesuh02&repo=coursev_web_frontend&theme=tokyonight&hide_border=false" alt="CourseV Frontend" width="48%" />
-  </a>
-</div>
+<p align="center">
+  <a href="https://github.com/Jesuh02/MCP-backendDeploy" target="_blank" rel="noopener noreferrer">📦 Repositorio Backend (MCP)</a>
+  &nbsp;&bull;&nbsp;
+  <a href="https://github.com/Jesuh02/coursev_web_frontend" target="_blank" rel="noopener noreferrer">💻 Repositorio Frontend (Vue 3)</a>
+</p>
 
 ### Arquitectura y decisiones técnicas
 
@@ -163,3 +145,87 @@ sequenceDiagram
   PWA->>API: Persiste curso y módulos
   API->>DB: Almacena materias, tareas y embeddings
   API->>R2: Publica recursos complementarios en background
+```
+
+---
+
+## Proyecto 02: Cobro (Sistema de Cobranza & Cartera)
+
+**Cobro** es una plataforma fintech integral diseñada para digitalizar, optimizar y blindar la gestión operativa de microcréditos y cobranza territorial (cartera puerta a puerta). Estructurado como un **monorepo distribuido**, el sistema centraliza la administración de tesorería y caja menor, la amortización automática de créditos, la logística de ruteo georreferenciado diario y la emisión instantánea de comprobantes transaccionales a costo cero.
+
+Su diseño arquitectónico aborda de raíz los riesgos críticos de la cobranza en campo: previene duplicidades mediante **bloqueos pesimistas** e **idempotencia**, garantiza continuidad operativa en zonas sin conectividad mediante una **cola de mutaciones offline** en el cliente, y opera sobre un motor relacional tolerante a fallos desplegado en **CockroachDB Cloud** y **PostgreSQL 15**.
+
+<p align="center">
+  <a href="https://github.com/Jesuh02/cobro" target="_blank" rel="noopener noreferrer">📦 Repositorio Monorepo (Jesuh02/cobro)</a>
+</p>
+
+### Estructura del Monorepo
+
+```
+cobro/
+├── backend/            # API REST modular en NestJS, TypeScript, Prisma ORM y arquitectura transaccional
+├── frontend/           # Cliente Flutter Web / Dart con soporte offline y UI neomórfica/claymórfica
+├── Landing_cobro/      # Portal comercial en Next.js 19, Tailwind CSS v4 y shaders 3D WebGL (Three.js)
+├── docker/whatsapp/    # Pasarela de mensajería independiente con Evolution API v2 (Baileys WebSocket)
+└── .github/workflows/  # Pipeline CI/CD atómico hacia Cloudflare Workers Static Assets y Railway
+```
+
+### Arquitectura y decisiones técnicas
+
+| Decisión técnica | Justificación e impacto |
+| :--- | :--- |
+| **Bloqueo Pesimista (`FOR UPDATE`) & Idempotencia** | Recaudo de cuotas protegido a nivel de fila (`SELECT ... FOR UPDATE`) junto a una ventana de idempotencia de 30 segundos. Elimina pagos duplicados y colisiones por reintentos ante latencia en redes celulares móviles. |
+| **Motor Híbrido: CockroachDB Cloud & PostgreSQL 15** | Operación en producción sobre **CockroachDB Cloud** (ANSI SQL distribuido con alta resiliencia) y **PostgreSQL 15** en Docker local. Esquema unificado bajo 24 entidades `tbl_*`, UUIDs nativos, 16 tipos ENUM y restricciones `CHECK` inyectadas en seed para integridad de datos. |
+| **Resiliencia Offline en Cliente Flutter Web** | Implementación de `OfflineMutationQueue` y almacenamiento local defensivo. Permite a los cobradores registrar pagos y clientes en zonas rurales o puntos ciegos de conectividad, sincronizando y conciliando en segundo plano al recuperar señal. |
+| **Optimización Logística de Rutas (Dijkstra + OSRM)** | Georreferenciación GPS de clientes, mapeo interactivo con FlutterMap y cálculo en tiempo real del orden óptimo de visitas con el algoritmo de Dijkstra y OSRM, minimizando tiempos de traslado y costos de transporte. |
+| **Control Contable y Arqueo Diario de Caja Menor** | Validación estricta de saldo disponible antes de desembolsos o gastos operativos, garantizando en tiempo real la ecuación contable: `PRESUPUESTO = CAJA MENOR + RECAUDADO - CRÉDITOS - GASTOS`. |
+| **Pasarela WhatsApp Desacoplada (Evolution API / Baileys)** | Emisión de comprobantes inmediatos al cliente vía WebSocket nativo a costo $0 por mensaje y consumo ligero (~140 MB RAM), con soporte desacoplado para conector oficial Meta Cloud API (YCloud) y auditoría en `tbl_notificaciones`. |
+| **Despliegue Atómico en Cloudflare Workers & Railway** | Pipeline en GitHub Actions que compila Flutter Web (`/app/`) y la landing Next.js (`/`), desplegándolos como recursos estáticos en Cloudflare Workers Static Assets, mientras el backend transaccional escala en Railway. |
+| **Entorno Docker Plug & Play** | Orquestación local en un solo comando (`docker compose up -d --build`) que levanta PostgreSQL 15, la API NestJS (con sincronización de esquema y seed de catálogos) y el cliente Flutter Web servido sobre Nginx. |
+
+### Flujo transaccional de recaudo en ruta
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor Cobrador as Cobrador (Campo)
+  participant App as Flutter Web (Cliente)
+  participant API as Backend (NestJS)
+  participant DB as CockroachDB / PostgreSQL
+  participant WPP as Pasarela WhatsApp (Evolution API)
+  actor Cliente as Cliente
+
+  Cobrador->>App: Registra pago de cuota
+  alt Conexión disponible
+    App->>API: POST /api/v1/pagos (Idempotency-Key, DTO)
+    API->>DB: Inicia transacción interactiva (BEGIN)
+    API->>DB: SELECT ... FOR UPDATE (Bloqueo pesimista de crédito y cuota)
+    API->>DB: Aplica amortización en cascada y actualiza saldo
+    API->>DB: Registra movimiento de ingreso en Caja Menor
+    API->>DB: Confirma transacción (COMMIT)
+    API-->>App: 201 Created (Comprobante generado)
+    App-->>Cobrador: Confirmación visual inmediata en pantalla
+    API-)WPP: Despacho asíncrono de recibo transaccional
+    WPP-)Cliente: Mensaje de WhatsApp con detalle del pago y saldo restante
+  else Sin cobertura celular (Offline)
+    App->>App: Encola transacción en OfflineMutationStore
+    App-->>Cobrador: Confirmación provisional en modo offline
+    Note over App,API: Al reconectar: despacho automático en segundo plano y conciliación
+  end
+```
+
+---
+
+<div align="center">
+  <p>
+    <strong>Jesús Cueto</strong> — Software Engineer especializado en arquitecturas transaccionales, modularidad y sistemas distribuidos.
+  </p>
+  <p>
+    <a href="https://github.com/JesusC1755" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/GitHub-JesusC1755-111827?style=for-the-badge&logo=github" alt="GitHub" />
+    </a>
+    <a href="mailto:jdcueto11@gmail.com" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/Email-jdcueto11%40gmail.com-ea4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+    </a>
+  </p>
+</div>
